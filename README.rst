@@ -16,8 +16,8 @@ Orientador
 Contribuir
 ----------
 
-- Trello: github.com/$project/$project/issues
-- Source Code: github.com/$project/$project
+- Trello: https://trello.com/b/cOCx27pO/eleicoesabertas
+- Source Code: https://bitbucket.org/lucaslagrimante/eleicoesabertas/src/master/
 
 Contato
 -------
