@@ -6,6 +6,8 @@ Lista
 --------
 
 #. Solidity Docs -> https://solidity.readthedocs.io/en/v0.5.4/index.html
-#. Sphinx -> http://www.sphinx-doc.org/en/master/#
+#. Sphinx -> http://www.sphinx-doc.org/en/master
 #. reStructuredText Primer -> http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
 #. MetaMask -> https://metamask.io/
+#. Remix Ethereum -> https://remix.ethereum.org
+#. Read the Docs -> https://readthedocs.org/
