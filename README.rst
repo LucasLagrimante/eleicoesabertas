@@ -1,41 +1,25 @@
-Template
+Sobre
 ========
 
-$project will solve your problem of where to start with documentation,
-by providing a basic explanation of how to do it easily.
+WIP
 
-Look how easy it is to use:
-
-    import project
-    # Get your stuff done
-    project.do_stuff()
-
-Features
+Aluno
 --------
 
-- Be awesome
-- Make things faster
+- Lucas Lagrimante Martinho
 
-Installation
+Orientador
 ------------
 
-Install $project by running:
+- Felipe Jabour
 
-    install project
-
-Contribute
+Contribuir
 ----------
 
-- Issue Tracker: github.com/$project/$project/issues
+- Trello: github.com/$project/$project/issues
 - Source Code: github.com/$project/$project
 
-Support
+Contato
 -------
 
-If you are having issues, please let us know.
-We have a mailing list located at: project@google-groups.com
-
-License
--------
-
-The project is licensed under the BSD license.
+lucaslagrimante@live.com
