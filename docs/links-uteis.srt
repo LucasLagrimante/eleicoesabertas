@@ -8,3 +8,4 @@ Lista
 #. Solidity Docs -> https://solidity.readthedocs.io/en/v0.5.4/index.html
 #. Sphinx -> http://www.sphinx-doc.org/en/master/#
 #. reStructuredText Primer -> http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
+#. MetaMask -> https://metamask.io/
