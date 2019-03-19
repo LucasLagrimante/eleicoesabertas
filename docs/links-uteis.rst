@@ -11,3 +11,5 @@ Lista
 #. MetaMask -> https://metamask.io/
 #. Remix Ethereum -> https://remix.ethereum.org
 #. Read the Docs -> https://readthedocs.org/
+#. Blockchain ( Class Diagram (UML)) -> https://creately.com/diagram/example/jezsabfq2/Blockchain
+#. Artigos utilizados no estudo -> https://drive.google.com/drive/folders/16lMhJfBZy_1pSLFWGcmLuju2qNCtIlFJ?usp=sharing
