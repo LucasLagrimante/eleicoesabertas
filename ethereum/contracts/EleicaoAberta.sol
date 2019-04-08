@@ -5,8 +5,8 @@ contract OpenElectionFactory {
 
     address[] public deployedOpenElections;
 
-    function createOpenElection(bool candidatesOpen, uint numMaxCandidates, uint numMaxVoters) public {
-        OpenElection newOpenElection = new OpenElection(candidatesOpen, numMaxCandidates, numMaxVoters);
+    function createOpenElection(uint numMaxCandidates, uint numMaxVoters, uint onlyAuthenticated) public {
+        OpenElection newOpenElection = new OpenElection(numMaxCandidates, numMaxVoters, onlyAuthenticated);
         deployedOpenElections.push(address(newOpenElection));
     }
 
@@ -18,40 +18,95 @@ contract OpenElectionFactory {
 
 contract OpenElection {
 
-    struct Candidate {
-        string name;
-        address where;
-        bool authenticated;
-    }
-
     struct Voter {
-        string name;
+        string completeName;
         address where;
-        bool alreadyVoted;
         bool authenticated;
     }
 
-    Candidates[] public candidates;
+    struct Candidate {
+        string completeName;
+        address where;
+        uint numVotes;
+        bool authenticated;
+    }
+
+    address public manager;
+    mapping(address => uint) public candidates;
+    People[] public candidatesArray;
+    mapping(address => uint) public voters;
+    People[] public votersArray;
     uint public maxCandidates;
     uint public maxVoters;
-    bool public isCandidatesOpen;
-    mapping(address => bool) public voters;
+    uint public numberVotesAuthenticated;
+    bool public onlyAuthenticated;
+    bool public isEnded;
+    mapping(address => bool) public alreadyVoted;
 
-    //funcoes modificadoras sao colocadas normalmente acima da constructora
-    //declaradas depois da visibilidade da funcion
-    modifier voter() {
+    modifier restricted() {
+        require(msg.sender == manager);
+        _;
+    }
+
+    modifier alreadyVoted() {
+        require(!alreadyVoted[msg.sender]);
+        _;
+    }
+
+    modifier isVoter() {
         require(voters[msg.sender]);
         _;
     }
 
-    constructor(bool candidatesOpen, uint numMaxCandidates, uint numMaxVoters) public {
-        isCandidatesOpen = candidatesOpen;
-        maxCandidates = numMaxCandidates;
-        maxVoters = numMaxVoters;
+    modifier authenticated() {
+        require(onlyAuthenticated);
+        _;
     }
 
-    function vote() public voter {
-      //verificar se já votou
+    constructor(uint numMaxCandidates, uint numMaxVoters, onlyAuthenticated) public {
+        manager = msg.sender;
+        maxCandidates = numMaxCandidates;
+        maxVoters = numMaxVoters;
+        onlyAuthenticated = onlyAuthenticated;
+        isEnded = false;
+    }
+
+    function createVoter(string memory completeName)
+    public
+    {
+        Voter memory newVoter = new Voter ({
+            completeName = completeName,
+            authenticated = false
+        });
+
+        candidates[msg.sender] = votersArray.length + 1;
+        votersArray.push(newVoter);
+    }
+
+    function createCandidate(string memory completeName)
+    public restricted
+    {
+        Candidate memory newCandidate = new Candidate ({
+            completeName = completeName,
+            authenticated = false,
+            numVotes = 0
+        });
+
+        candidates[msg.sender] = candidatesArray.length + 1;
+        candidatesArray.push(newCandidate);
+    }
+
+    function vote(uint indexOfCandidate)
+    public isVoter alreadyVoted
+    {
+        Candidate storage candidate = candidatesArray[indexOfCandidate];
+        candidate.numVotes++;
+    }
+
+    function endOpenElection() public restricted {
+        require(!isEnded);
+        require(votersArray.length >= (numMaxVoters * 0.6));
+        isEnded = true;
     }
 
 }
