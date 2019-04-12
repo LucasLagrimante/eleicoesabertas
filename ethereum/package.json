@@ -1,0 +1,29 @@
+{
+  "name": "openelections",
+  "version": "1.0.0",
+  "description": "Sistema de eleições desenvolvido com a tecnologia de contratos inteligentes baseado em Blockchain",
+  "main": "compile.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://bitbucket.org/lucaslagrimante/eleicoesabertas.git"
+  },
+  "keywords": [
+    "openelection",
+    "blockchain",
+    "poll"
+  ],
+  "author": "Lucas Lagrimante",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/lucaslagrimante/eleicoesabertas#readme",
+  "dependencies": {
+    "fs-extra": "^7.0.1",
+    "ganache-cli": "^6.4.2",
+    "mocha": "^6.1.2",
+    "solc": "^0.4.25",
+    "truffle-hdwallet-provider": "^1.0.6",
+    "web3": "^1.0.0-beta.33"
+  }
+}
