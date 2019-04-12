@@ -189,7 +189,7 @@ contract OpenElection {
     }
 
     function setWinner()
-    public restrict
+    public restricted
     {
         require(isEnded, "Eleição em andamento.");
 
