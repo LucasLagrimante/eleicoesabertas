@@ -49,8 +49,8 @@ contract OpenElection {
     uint public maxVoters;
     uint public totalVotes;
     bool public onlyAuthenticated;
-    bool internal isEnded;
-    bool internal isStarted;
+    bool public isEnded;
+    bool public isStarted;
     address public winner;
 
     modifier restricted() {
@@ -150,6 +150,9 @@ contract OpenElection {
         candidate.numVotes++;
         totalVotes++;
         voter.voted = true;
+        if(totalVotes == votersArray.length){
+          endOpenElection();
+        }
     }
 
     function startOpenElection()
@@ -159,11 +162,12 @@ contract OpenElection {
     }
 
     function endOpenElection()
-    public restricted ended
+    internal ended
     {
         require(isStarted, "Essa eleição ainda não começou.");
         require(totalVotes > (maxVoters / 2), "Número mínimo de votos ainda não atingido para finalizar eleição.");
         isEnded = true;
+        setWinner();
     }
 
     function setVoterAuthenticatedById(uint _indexOfVoter)
@@ -189,7 +193,7 @@ contract OpenElection {
     }
 
     function setWinner()
-    public restricted
+    internal
     {
         require(isEnded, "Eleição em andamento.");
 
