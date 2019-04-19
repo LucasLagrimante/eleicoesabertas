@@ -2,6 +2,8 @@ const path = require("path");
 const solc = require("solc");
 const fs = require("fs-extra");
 
+// node compile.js
+
 const buildPath = path.resolve(__dirname, "build");
 fs.removeSync(buildPath);
 

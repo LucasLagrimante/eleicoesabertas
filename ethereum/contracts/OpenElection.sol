@@ -9,7 +9,7 @@ contract OpenElectionFactory {
     address[] public deployedOpenElections;
 
     function createOpenElection(uint _maxCandidates, uint _maxVoters, bool _onlyAuthenticated) public {
-        OpenElection newOpenElection = new OpenElection(_maxCandidates, _maxVoters, _onlyAuthenticated);
+        OpenElection newOpenElection = new OpenElection(msg.sender, _maxCandidates, _maxVoters, _onlyAuthenticated);
         deployedOpenElections.push(address(newOpenElection));
     }
 
@@ -83,8 +83,8 @@ contract OpenElection {
         _;
     }
 
-    constructor(uint _maxCandidates, uint _maxVoters, bool _onlyAuthenticated) public {
-        manager = msg.sender;
+    constructor(address creator, uint _maxCandidates, uint _maxVoters, bool _onlyAuthenticated) public {
+        manager = creator;
         maxCandidates = _maxCandidates;
         maxVoters = _maxVoters;
         onlyAuthenticated = _onlyAuthenticated;

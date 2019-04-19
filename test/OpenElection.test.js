@@ -5,7 +5,7 @@ const provider = ganache.provider();
 const web3 = new Web3(provider);
 web3.currentProvider.setMaxListeners(300); // or more :)
 
-// run test
+// npm run test
 
 const compiledFactory = require("../ethereum/build/OpenElectionFactory.json");
 const compiledOpenElection = require("../ethereum/build/OpenElection.json");
@@ -21,22 +21,22 @@ beforeEach(async () => {
   // aqui estamos gerando um novo contrato fábrica
   factory = await new web3.eth.Contract(JSON.parse(compiledFactory.interface)).
   deploy({
-      data: compiledFactory.byte "code
+      data: compiledFactory.bytecode
     })
     .send({
       from: accounts[0],
-      gas: "1000000"
+      gas: "3000000"
     });
 
   //verificar abaixo o que estamos executando de fato na rede:
-  //call or send?
+  //call or send? send = custo
   // estamos gerando um novo contrato de openElection
   await factory.methods.createOpenElection(2, 2, false).send({
     from: accounts[0], //manager
-    gas: '1000000'
+    gas: '3000000'
   });
 
-  // aqui estamos pega ndo a primeira campanha gerada na vida da fabrica
+  // aqui estamos pegando a primeira Eleicao gerada na vida da fabrica
   [openElectionAddress] = await factory.methods.getDeployedOpenElections().call();
   openElection = await new web3.eth.Contract(
     JSON.parse(compiledOpenElection.interface),
