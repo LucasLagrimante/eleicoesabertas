@@ -150,8 +150,8 @@ contract OpenElection {
         candidate.numVotes++;
         totalVotes++;
         voter.voted = true;
-        if(totalVotes == votersArray.length){
-          endOpenElection();
+        if (totalVotes == votersArray.length) {
+            endOpenElection();
         }
     }
 
@@ -160,16 +160,7 @@ contract OpenElection {
     {
         isStarted = true;
     }
-
-    function endOpenElection()
-    internal ended
-    {
-        require(isStarted, "Essa eleição ainda não começou.");
-        require(totalVotes > (maxVoters / 2), "Número mínimo de votos ainda não atingido para finalizar eleição.");
-        isEnded = true;
-        setWinner();
-    }
-
+    
     function setVoterAuthenticatedById(uint _indexOfVoter)
     public restricted started
     {
@@ -192,6 +183,32 @@ contract OpenElection {
         candidate.authenticated = true;
     }
 
+    function getNumOfVoters() public view returns (uint) {
+        return votersArray.length;
+    }
+
+    function getNumOfCandidates() public view returns (uint) {
+        return candidatesArray.length;
+    }
+
+    function getIndexCandidateByAddress(address _addressOfCandidate) public view returns (uint) {
+        return candidates[_addressOfCandidate];
+    }
+
+    function getAddressCandidateByIndex(uint _indexOfCandidate) public view returns (address) {
+        require(candidatesArray[_indexOfCandidate].exists, "Candidato não existe.");
+        return candidatesArray[_indexOfCandidate].where;
+    }
+
+    function endOpenElection()
+    internal ended
+    {
+        require(isStarted, "Essa eleição ainda não começou.");
+        require(totalVotes > (maxVoters / 2), "Número mínimo de votos ainda não atingido para finalizar eleição.");
+        isEnded = true;
+        setWinner();
+    }
+
     function setWinner()
     internal
     {
@@ -210,25 +227,9 @@ contract OpenElection {
         }
     }
 
-    function getNumOfVoters() public view returns (uint) {
-        return votersArray.length;
-    }
-
-    function getNumOfCandidates() public view returns (uint) {
-        return candidatesArray.length;
-    }
-
-    function getIndexCandidateByAddress(address _addressOfCandidate) public view returns (uint) {
-        return candidates[_addressOfCandidate];
-    }
-
-    function getAddressCandidateByIndex(uint _indexOfCandidate) public view returns (address) {
-        require(candidatesArray[_indexOfCandidate].exists, "Candidato não existe.");
-        return candidatesArray[_indexOfCandidate].where;
-    }
-
     function getAddressVoterByIndex(uint _indexOfVoter) private view returns (address) {
         require(votersArray[_indexOfVoter].exists, "Eleitor não existe.");
         return votersArray[_indexOfVoter].where;
     }
+
 }
