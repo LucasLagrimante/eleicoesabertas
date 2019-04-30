@@ -31,7 +31,7 @@ beforeEach(async () => {
   //verificar abaixo o que estamos executando de fato na rede:
   //call or send? send = custo
   // estamos gerando um novo contrato de openElection
-  await factory.methods.createOpenElection(2, 2, false).send({
+  await factory.methods.createOpenElection(2, 2, false, 'Teste').send({
     from: accounts[0], //manager
     gas: '3000000'
   });

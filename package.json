@@ -4,28 +4,29 @@
   "description": "Sistema de eleições desenvolvido com a tecnologia de contratos inteligentes baseado em Blockchain",
   "main": "index.js",
   "engines": {
-  "node": "10.15.3"
+    "node": "10.15.3",
+    "npm": "6.4.1"
   },
   "scripts": {
     "test": "mocha",
     "dev": "node server.js",
-  "build": "next build",
-  "start": "next start -p $PORT",
-  "heroku-postbuild": "npm run build",
-  "now-build": "next build && next export -o dist"
+    "build": "next build",
+    "start": "next start -p $PORT",
+    "heroku-postbuild": "npm run build",
+    "now-build": "next build && next export -o dist"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://bitbucket.org/lucaslagrimante/eleicoesabertas.git"
+    "url": "https://github.com/LucasLagrimante/eleicoesabertas"
   },
   "keywords": [
-    "openelection",
-    "blockchain",
-    "poll"
+    "open",
+    "election",
+    "blockchain"
   ],
   "author": "Lucas Lagrimante",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/lucaslagrimante/eleicoesabertas#readme",
+  "homepage": "https://eleicoes-abertas.herokuapp.com/",
   "dependencies": {
     "fs-extra": "^7.0.1",
     "ganache-cli": "^6.4.1",

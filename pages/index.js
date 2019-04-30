@@ -4,38 +4,41 @@ import { Card, Button } from 'semantic-ui-react';
 import Layout from '../components/Layout';
 import web3 from '../ethereum/web3';
 import { Link } from '../routes';
-import Campaign from '../ethereum/campaign';
+import OpenElection from '../ethereum/openelection';
 
-class CampaignIndex extends Component {
+class OpenElectionIndex extends Component {
 
   static async getInitialProps() {
-    const campaignsAddressArray = await factory.methods.getDeployedCampaingns().call();
-    const campaignsCount = await factory.methods.getDeployedCampaignsCount().call();
+    const openElectionsAddressArray = await factory.methods.getDeployedOpenElections().call();
+    const openElectionsCount = await factory.methods.getDeployedOpenElectionsCount().call();
 
-    const campaigns = await Promise.all(
-      Array(parseInt(campaignsCount)).fill().map((element, index) => {
+    const openElections = await Promise.all(
+      Array(parseInt(openElectionsCount)).fill().map((element, index) => {
         return {
-          campaignName: Campaign(campaignsAddressArray[index]).methods.campaignName().call(),
-          address: campaignsAddressArray[index]
+          openElectionName: OpenElection(openElectionsAddressArray[index]).methods.electionName().call().then(v => {
+            return v;
+          }),
+          address: openElectionsAddressArray[index]
         }
       })
     );
 
-    return { campaigns, campaignsCount }
+    return { openElections, openElectionsCount }
   }
 
-  renderCampaingns() {
-    const items = this.props.campaigns.map((element, index) => {
+  renderOpenElections() {
+    const items = this.props.openElections.map((element, index) => {
       return {
-        header: element.campaignName,
+        header: element.openElectionName.toString(),
         meta: element.address,
         description: (
-          <Link route={`/campaigns/${element.address}`}>
-            <a>View Campaign</a>
+          <Link route={`/openElections/${element.address}`}>
+            <a>Ver Eleição Aberta</a>
           </Link>
         ),
         fluid: true
       }
+
     });
 
     return <Card.Group items={items} />;
@@ -45,22 +48,22 @@ class CampaignIndex extends Component {
     return (
       <Layout>
         <div>
-        <h3> Open Campaigns </h3>
-        <Link route='/campaigns/new'>
+        <h3> Eleições Criadas </h3>
+        <Link route='/openElections/new'>
           <a>
             <Button
               floated="right"
-              content="Creat Campaign"
+              content="Criar Eleição Aberta"
               icon="add circle"
               primary
             />
           </a>
         </Link>
-        {this.renderCampaingns()}
+        {this.renderOpenElections()}
         </div>
       </Layout>
     )
   }
 }
 
-export default CampaignIndex;
+export default OpenElectionIndex;

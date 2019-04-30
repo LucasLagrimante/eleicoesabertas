@@ -7,8 +7,8 @@ try {
   fs.removeSync(buildPath);
   console.log('Pasta e arquivos apagados...');
 
-  const campaignPath = path.resolve(__dirname, "contracts", "OpenElection.sol");
-  const source = fs.readFileSync(campaignPath, "utf8");
+  const openElectionPath = path.resolve(__dirname, "contracts", "OpenElection.sol");
+  const source = fs.readFileSync(openElectionPath, "utf8");
   console.log('Contrato encontrado e carregado...');
   // to debug
   // console.log(solc.compile(source, 1));
