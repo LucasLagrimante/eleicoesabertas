@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Sistema de eleições desenvolvido com a tecnologia de contratos inteligentes baseado em Blockchain",
   "main": "index.js",
+  "engines": {
+  "node": "10.15.3"
+  },
   "scripts": {
     "test": "mocha",
     "dev": "node server.js",
