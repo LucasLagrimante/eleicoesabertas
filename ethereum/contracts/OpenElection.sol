@@ -8,13 +8,22 @@ contract OpenElectionFactory {
 
     address[] public deployedOpenElections;
 
-    function createOpenElection(uint _maxCandidates, uint _maxVoters, bool _onlyAuthenticated) public {
-        OpenElection newOpenElection = new OpenElection(msg.sender, _maxCandidates, _maxVoters, _onlyAuthenticated);
+    function createOpenElection(
+    uint _maxCandidates, uint _maxVoters, bool _onlyAuthenticated, string memory _electionName)
+    public
+    {
+        OpenElection newOpenElection = new OpenElection(
+            msg.sender, _maxCandidates, _maxVoters, _onlyAuthenticated, _electionName
+        );
         deployedOpenElections.push(address(newOpenElection));
     }
 
     function getDeployedOpenElections() public view returns (address[] memory) {
         return deployedOpenElections;
+    }
+
+    function getDeployedOpenElectionsCount() public view returns (uint256) {
+        return deployedOpenElections.length;
     }
 }
 
@@ -41,6 +50,7 @@ contract OpenElection {
     }
 
     address public manager;
+    string public electionName;
     mapping(address => uint) internal candidates;
     Candidate[] internal candidatesArray;
     mapping(address => uint) internal voters;
@@ -83,11 +93,14 @@ contract OpenElection {
         _;
     }
 
-    constructor(address creator, uint _maxCandidates, uint _maxVoters, bool _onlyAuthenticated) public {
+    constructor
+    (address creator, uint _maxCandidates, uint _maxVoters, bool _onlyAuthenticated, string memory _electionName)
+    public {
         manager = creator;
         maxCandidates = _maxCandidates;
         maxVoters = _maxVoters;
         onlyAuthenticated = _onlyAuthenticated;
+        electionName = _electionName;
     }
 
     function beAnVoter(string memory _completeName, string memory _cpf)
@@ -160,7 +173,7 @@ contract OpenElection {
     {
         isStarted = true;
     }
-    
+
     function setVoterAuthenticatedById(uint _indexOfVoter)
     public restricted started
     {
@@ -183,21 +196,45 @@ contract OpenElection {
         candidate.authenticated = true;
     }
 
-    function getNumOfVoters() public view returns (uint) {
+    function getNumOfVoters()
+    public view returns (uint)
+    {
         return votersArray.length;
     }
 
-    function getNumOfCandidates() public view returns (uint) {
+    function getNumOfCandidates()
+    public view returns (uint)
+    {
         return candidatesArray.length;
     }
 
-    function getIndexCandidateByAddress(address _addressOfCandidate) public view returns (uint) {
+    function getIndexCandidateByAddress(address _addressOfCandidate)
+    public view returns (uint)
+    {
         return candidates[_addressOfCandidate];
     }
 
-    function getAddressCandidateByIndex(uint _indexOfCandidate) public view returns (address) {
+    function getAddressCandidateByIndex(uint _indexOfCandidate)
+    public view returns (address)
+    {
         require(candidatesArray[_indexOfCandidate].exists, "Candidato não existe.");
         return candidatesArray[_indexOfCandidate].where;
+    }
+
+    function getSummary() public view returns (
+        address, address, uint, uint, uint, bool, bool, bool, string memory
+        ) {
+        return (
+            manager,
+            winner,
+            maxVoters,
+            maxCandidates,
+            totalVotes,
+            onlyAuthenticated,
+            isEnded,
+            isStarted,
+            electionName
+        );
     }
 
     function endOpenElection()
@@ -227,7 +264,9 @@ contract OpenElection {
         }
     }
 
-    function getAddressVoterByIndex(uint _indexOfVoter) private view returns (address) {
+    function getAddressVoterByIndex(uint _indexOfVoter)
+    private view returns (address)
+    {
         require(votersArray[_indexOfVoter].exists, "Eleitor não existe.");
         return votersArray[_indexOfVoter].where;
     }
