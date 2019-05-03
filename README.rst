@@ -17,7 +17,7 @@ Contribuir
 ----------
 
 - Trello: https://trello.com/b/cOCx27pO/eleicoesabertas
-- Source Code: https://bitbucket.org/lucaslagrimante/eleicoesabertas/src/master/
+- Source Code: https://github.com/LucasLagrimante/eleicoesabertas
 
 Contato
 -------
