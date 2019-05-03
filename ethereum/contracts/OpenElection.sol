@@ -108,7 +108,7 @@ contract OpenElection {
     {
         require(votersArray.length < maxVoters, "Limite de eleitores atingido.");
         require(voters[msg.sender] == 0, "Você já é um Eleitor.");
-        require(candidates[msg.sender] == 0, "Você é um Candidato e não tem permissão para votar.");
+        require(candidates[msg.sender] == 0, "Você é um Candidato e não pode ser um eleitor.");
 
         Voter memory newVoter = Voter({
             completeName: _completeName,
@@ -123,16 +123,17 @@ contract OpenElection {
         voters[msg.sender] = votersArray.length;
     }
 
-    function createCandidate(string memory _completeName, address _cadidateAddress, string memory _cpf)
+    function createCandidate(string memory _completeName, string memory _cpf, address _candidateAddress)
     public restricted ended started
     {
         require(candidatesArray.length < maxCandidates, "Limite de candidatos atingido.");
-        require(voters[_cadidateAddress] == 0, "Usuário é um Eleitor.");
-        require(candidates[_cadidateAddress] == 0, "Usuário já é um Candidato.");
+        require(voters[_candidateAddress] == 0, "Usuário é um Eleitor.");
+        require(candidates[_candidateAddress] == 0, "Usuário já é um Candidato.");
+        require(_candidateAddress == manager, "Esse Candidato é o administrador.");
 
         Candidate memory newCandidate = Candidate({
             completeName: _completeName,
-            where: _cadidateAddress,
+            where: _candidateAddress,
             cpf: _cpf,
             authenticated: false,
             numVotes: 0,
@@ -140,7 +141,7 @@ contract OpenElection {
         });
 
         candidatesArray.push(newCandidate);
-        candidates[_cadidateAddress] = candidatesArray.length;
+        candidates[_candidateAddress] = candidatesArray.length;
     }
 
     function vote(uint _indexOfCandidate)
