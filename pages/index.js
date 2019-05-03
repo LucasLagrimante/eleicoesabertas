@@ -11,17 +11,21 @@ class OpenElectionIndex extends Component {
   static async getInitialProps() {
     const openElectionsAddressArray = await factory.methods.getDeployedOpenElections().call();
     const openElectionsCount = await factory.methods.getDeployedOpenElectionsCount().call();
+    const openElectionsArray = [];
 
     const openElections = await Promise.all(
       Array(parseInt(openElectionsCount)).fill().map((element, index) => {
         return {
-          openElectionName: OpenElection(openElectionsAddressArray[index]).methods.electionName().call().then(v => {
-            return v;
-          }),
+        //  openElectionName: OpenElection(openElectionsAddressArray[index]).methods.electionName().call().then(v => {
+        //    console.log(v);
+        //  }),
+        openElectionName: 'Eleição ' + index,
           address: openElectionsAddressArray[index]
         }
       })
     );
+
+    openElections.reverse();
 
     return { openElections, openElectionsCount }
   }
@@ -33,7 +37,7 @@ class OpenElectionIndex extends Component {
         meta: element.address,
         description: (
           <Link route={`/openElections/${element.address}`}>
-            <a>Ver Eleição Aberta</a>
+            Ver Eleição Aberta
           </Link>
         ),
         fluid: true
@@ -50,14 +54,12 @@ class OpenElectionIndex extends Component {
         <div>
         <h3> Eleições Criadas </h3>
         <Link route='/openElections/new'>
-          <a>
             <Button
               floated="right"
               content="Criar Eleição Aberta"
               icon="add circle"
               primary
             />
-          </a>
         </Link>
         {this.renderOpenElections()}
         </div>

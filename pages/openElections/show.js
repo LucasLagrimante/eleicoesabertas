@@ -10,9 +10,12 @@ class OpenElectionShow extends Component {
     static async getInitialProps(props) {
       const openElection = OpenElection(props.query.address);
       const summary = await openElection.methods.getSummary().call();
+      const [account] = await web3.eth.getAccounts();
+      const isManager =  account == summary[0] ? true : false;
 
       return {
         address: props.query.address,
+        isManager: isManager,
         manager: summary[0],
         winner: summary[1],
         maxVoters: summary[2],
@@ -21,7 +24,8 @@ class OpenElectionShow extends Component {
         onlyAuthenticated: summary[5].toString(),
         isEnded: summary[6].toString(),
         isStarted: summary[7].toString(),
-        openElectionName: summary[8].toString()
+        openElectionName: summary[8].toString(),
+        beAnVoterMessageOpen: false
       };
     }
 
@@ -49,7 +53,7 @@ class OpenElectionShow extends Component {
           {
             header: winner,
             meta: 'Vencedor',
-            description: 'Vencedor Único.',
+            description: 'Vencedor.',
             style: { overflowWrap: 'break-word' }
           },
           {
@@ -90,27 +94,58 @@ class OpenElectionShow extends Component {
     render() {
     return (
       <Layout>
+
       <Link route={`/`}>
-        <a><Button primary circular content='Voltar' icon='arrow left' labelPosition='left' /></a>
+        <Button primary circular content='Voltar' icon='arrow left' labelPosition='left' />
       </Link>
+
        <h3>Detalhes da Eleição - {this.props.openElectionName}</h3>
        <Grid>
+
         <Grid.Row>
+
           <Grid.Column width={10}>
             {this.renderCards()}
           </Grid.Column>
-          <Grid.Column width={6}>
 
+          <Grid.Column width={6}>
           </Grid.Column>
+
         </Grid.Row>
+
+        {
+        this.props.isManager ? null :
+        (
         <Grid.Row>
-          <Grid.Column>
+
+          <Grid.Column width={2}>
             <Link route={`/openElections/${this.props.address}/voting`}>
-              <a><Button primary> Votar!! </Button></a>
+              <Button primary> Votar!! </Button>
             </Link>
           </Grid.Column>
+
+          <Grid.Column width={3}>
+            <Link route={`/openElections/${this.props.address}/beAnVoter`}>
+              <Button primary>Se tornar um eleitor</Button>
+            </Link>
+          </Grid.Column>
+
         </Grid.Row>
+        )
+        }
+
+        {
+        !this.props.isManager ? null :
+        (
+          <Grid.Column width={3}>
+          <Link route={`/openElections/${this.props.address}/createCandidate`}>
+            <Button primary>Criar novo candidato</Button>
+          </Link>
+          </Grid.Column>
+        )
+        }
        </Grid>
+
       </Layout>
     );
   }
