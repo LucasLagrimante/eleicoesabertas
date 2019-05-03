@@ -53,7 +53,7 @@ class OpenElectionNew extends Component {
     return (
       <Layout>
 
-      <Link route={`/openElections/${this.props.address}`}>
+      <Link route={`/`}>
         <Button primary circular content='Voltar' icon='arrow left' labelPosition='left' />
       </Link>
 
