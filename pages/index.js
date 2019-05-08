@@ -11,7 +11,6 @@ class OpenElectionIndex extends Component {
   static async getInitialProps() {
     const openElectionsAddressArray = await factory.methods.getDeployedOpenElections().call();
     const openElectionsCount = await factory.methods.getDeployedOpenElectionsCount().call();
-    const openElectionsArray = [];
 
     const openElections = await Promise.all(
       Array(parseInt(openElectionsCount)).fill().map((element, index) => {
@@ -62,6 +61,8 @@ class OpenElectionIndex extends Component {
             />
         </Link>
         {this.renderOpenElections()}
+        <br/><br/>
+        <div>Foram encontradas {this.props.openElections.length} eleições.</div>
         </div>
       </Layout>
     )

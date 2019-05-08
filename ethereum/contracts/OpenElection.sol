@@ -129,7 +129,7 @@ contract OpenElection {
         require(candidatesArray.length < maxCandidates, "Limite de candidatos atingido.");
         require(voters[_candidateAddress] == 0, "Usuário é um Eleitor.");
         require(candidates[_candidateAddress] == 0, "Usuário já é um Candidato.");
-        require(_candidateAddress == manager, "Esse Candidato é o administrador.");
+        require(_candidateAddress != manager, "Esse Candidato é o administrador.");
 
         Candidate memory newCandidate = Candidate({
             completeName: _completeName,
@@ -144,7 +144,7 @@ contract OpenElection {
         candidates[_candidateAddress] = candidatesArray.length;
     }
 
-    function vote(uint _indexOfCandidate)
+    function vote(address _addressOfCandidate)
     public isVoter ended
     {
         require(isStarted, "Eleição ainda não começou.");
@@ -155,8 +155,8 @@ contract OpenElection {
             require(voter.authenticated, "Apenas usuários autenticados.");
         }
 
-        require(candidatesArray[_indexOfCandidate].exists, "Candidato não existe.");
-        Candidate storage candidate = candidatesArray[_indexOfCandidate];
+        require(candidatesArray[candidates[_addressOfCandidate]].exists, "Candidato não existe.");
+        Candidate storage candidate = candidatesArray[candidates[_addressOfCandidate]];
         if (onlyAuthenticated) {
             require(candidate.authenticated, "Apenas candidatos autenticados podem ser votados autenticados.");
         }
@@ -198,19 +198,19 @@ contract OpenElection {
     }
 
     function getNumOfVoters()
-    public view returns (uint)
+    public view returns (uint256)
     {
         return votersArray.length;
     }
 
     function getNumOfCandidates()
-    public view returns (uint)
+    public view returns (uint256)
     {
         return candidatesArray.length;
     }
 
     function getIndexCandidateByAddress(address _addressOfCandidate)
-    public view returns (uint)
+    public view returns (uint256)
     {
         return candidates[_addressOfCandidate];
     }
@@ -222,8 +222,20 @@ contract OpenElection {
         return candidatesArray[_indexOfCandidate].where;
     }
 
+    function isCandidateBool(address _addressOfCandidate)
+    public view returns (bool)
+    {
+        return candidatesArray[candidates[_addressOfCandidate]].exists;
+    }
+
+    function isVoterBool(address _addressOfVoter)
+    public view returns (bool)
+    {
+        return votersArray[voters[_addressOfVoter]].exists;
+    }
+
     function getSummary() public view returns (
-        address, address, uint, uint, uint, bool, bool, bool, string memory
+        address, address, uint256, uint256, uint256, bool, bool, bool, string memory
         ) {
         return (
             manager,
@@ -236,6 +248,15 @@ contract OpenElection {
             isStarted,
             electionName
         );
+    }
+
+    function forceEndOpenElection()
+    public restricted ended
+    {
+        require(isStarted, "Essa eleição ainda não começou.");
+        require(totalVotes > (maxVoters / 2), "Número mínimo de votos ainda não atingido para finalizar eleição.");
+        isEnded = true;
+        setWinner();
     }
 
     function endOpenElection()

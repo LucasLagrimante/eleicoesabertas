@@ -74,7 +74,7 @@ describe('OpenElections', () => {
   });
 
   it('add candidates', async () => {
-    await openElection.methods.createCandidate('Candidato1', accounts[1], '13075988626').send({
+    await openElection.methods.createCandidate('Candidato1', '13075988626', accounts[1]).send({
       from: accounts[0], //manager
       gas: '3000000'
     });
@@ -82,7 +82,7 @@ describe('OpenElections', () => {
     let numOfCandidates = await openElection.methods.getNumOfCandidates().call();
     assert(numOfCandidates == 1);
 
-    await openElection.methods.createCandidate('Candidato2', accounts[2], '12345678910').send({
+    await openElection.methods.createCandidate('Candidato2', '12345678910', accounts[2]).send({
       from: accounts[0], //manager
       gas: '3000000'
     });
@@ -101,11 +101,11 @@ describe('OpenElections', () => {
       from: accounts[2],
       gas: '3000000'
     });
-    await openElection.methods.createCandidate('Candidato1', accounts[3], '13075988626').send({
+    await openElection.methods.createCandidate('Candidato1', '13075988626', accounts[3]).send({
       from: accounts[0],//manager
       gas: '3000000'
     });
-    await openElection.methods.createCandidate('Candidato2', accounts[4], '12345678910').send({
+    await openElection.methods.createCandidate('Candidato2', '12345678910', accounts[4]).send({
       from: accounts[0], //manager
       gas: '3000000'
     });
@@ -119,11 +119,11 @@ describe('OpenElections', () => {
     });
 
     //voting
-    await openElection.methods.vote(1).send({
+    await openElection.methods.vote(accounts[3]).send({
       from: accounts[1], //manager
       gas: '3000000'
     });
-    await openElection.methods.vote(1).send({
+    await openElection.methods.vote(accounts[3]).send({
       from: accounts[2], //manager
       gas: '3000000'
     });

@@ -1,21 +1,26 @@
 import React, { Component } from 'react';
 import Layout from '../../components/Layout';
 import OpenElection from '../../ethereum/openelection';
-import { Card, Grid, Button } from 'semantic-ui-react';
+import { Card, Grid, Button, Menu } from 'semantic-ui-react';
 import web3 from '../../ethereum/web3';
 //import ContributeForm from '../../components/ContributeForm';
 import { Link } from '../../routes';
 
 class OpenElectionShow extends Component {
+
     static async getInitialProps(props) {
       const openElection = OpenElection(props.query.address);
       const summary = await openElection.methods.getSummary().call();
       const [account] = await web3.eth.getAccounts();
+      //const isCandidate = openElection.methods.isCandidateBool(account).call();
+      //const isVoter = openElection.methods.isVoterBool(account).call();
       const isManager =  account == summary[0] ? true : false;
 
       return {
         address: props.query.address,
         isManager: isManager,
+        isCandidate: false,
+        isVoter: false,
         manager: summary[0],
         winner: summary[1],
         maxVoters: summary[2],
@@ -31,7 +36,6 @@ class OpenElectionShow extends Component {
 
     renderCards() {
         const {
-          address,
           manager,
           winner,
           maxVoters,
@@ -39,8 +43,7 @@ class OpenElectionShow extends Component {
           totalVotes,
           onlyAuthenticated,
           isEnded,
-          isStarted,
-          openElectionName
+          isStarted
         } = this.props;
 
         const items = [
@@ -109,41 +112,55 @@ class OpenElectionShow extends Component {
           </Grid.Column>
 
           <Grid.Column width={6}>
+
+            <Menu fluid vertical>
+              <Menu.Item className='header'>Opções</Menu.Item>
+
+              {
+              !this.props.isManager ? null :
+              (
+              <Menu.Item>
+                <Grid.Column width={3}>
+                <Link route={`/openElections/${this.props.address}/admin`}>
+                  <Button inverted color='red'>Painel Admin</Button>
+                </Link>
+                </Grid.Column>
+              </Menu.Item>
+              )
+              }
+
+              {
+              this.props.isManager ? null :
+              (
+              <Menu.Item>
+                <Link route={`/openElections/${this.props.address}/voting`}>
+                  <Button inverted color='teal'> Votar!! </Button>
+                </Link>
+              </Menu.Item>
+              )
+              }
+
+              {
+              this.props.isManager ? null :
+              (
+              <Menu.Item>
+                <Link route={`/openElections/${this.props.address}/beAnVoter`}>
+                  <Button
+                  disabled={this.props.isVoter}
+                  inverted
+                  color='blue'>
+                  Se tornar um eleitor
+                  </Button>
+                </Link>
+              </Menu.Item>
+              )
+              }
+            </Menu>
+
           </Grid.Column>
 
         </Grid.Row>
 
-        {
-        this.props.isManager ? null :
-        (
-        <Grid.Row>
-
-          <Grid.Column width={2}>
-            <Link route={`/openElections/${this.props.address}/voting`}>
-              <Button primary> Votar!! </Button>
-            </Link>
-          </Grid.Column>
-
-          <Grid.Column width={3}>
-            <Link route={`/openElections/${this.props.address}/beAnVoter`}>
-              <Button primary>Se tornar um eleitor</Button>
-            </Link>
-          </Grid.Column>
-
-        </Grid.Row>
-        )
-        }
-
-        {
-        !this.props.isManager ? null :
-        (
-          <Grid.Column width={3}>
-          <Link route={`/openElections/${this.props.address}/createCandidate`}>
-            <Button primary>Criar novo candidato</Button>
-          </Link>
-          </Grid.Column>
-        )
-        }
        </Grid>
 
       </Layout>

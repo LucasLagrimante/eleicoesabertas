@@ -20,6 +20,7 @@ class OpenElectionNew extends Component {
     electionName: '',
     termos: false,
     errorMessage: '',
+    sucessMessage: '',
     loading: false,
     disabled: false
   };
@@ -41,7 +42,12 @@ class OpenElectionNew extends Component {
       const accounts = await web3.eth.getAccounts();
       await factory.methods.createOpenElection( this.state.maxCandidates, this.state.maxVoters, this.state.onlyAuthenticated, this.state.electionName ).send( { from: accounts[ 0 ] } );
 
-      Router.pushRoute( '/' );
+      this.setState( { sucessMessage: 'Eleição criada!' } );
+
+      setTimeout(() => {
+        Router.pushRoute(`/`);
+      }, 3000);
+
     } catch ( e ) {
       this.setState( { errorMessage: e.message } )
     }
@@ -58,6 +64,13 @@ class OpenElectionNew extends Component {
       </Link>
 
       <h3>Criando uma eleição</h3>
+
+      {
+      !this.state.sucessMessage ? null :
+      (
+      <Message success header='Sucesso!' content={this.state.sucessMessage} />
+      )
+      }
 
       <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
         <Form.Field required>
@@ -105,7 +118,8 @@ class OpenElectionNew extends Component {
 
       </Form>
 
-    </Layout> );
+    </Layout>
+    );
   }
 }
 

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import Layout from '../../components/Layout';
-import OpenElection from '../../ethereum/openelection';
+import Layout from '../../../components/Layout';
+import OpenElection from '../../../ethereum/openelection';
 import {	Form,	Button,	Icon, Input, Message, Checkbox, Confirm} from 'semantic-ui-react';
-import factory from '../../ethereum/factory';
-import web3 from '../../ethereum/web3';
-import { Link, Router } from '../../routes';
+import factory from '../../../ethereum/factory';
+import web3 from '../../../ethereum/web3';
+import { Link, Router } from '../../../routes';
 
 class OpenElectionCreateCandidate extends Component {
 	static async getInitialProps( props ) {
@@ -18,13 +18,14 @@ class OpenElectionCreateCandidate extends Component {
 		candidateAddress: '',
 		termos: false,
 		loading: false,
-		disabled: false
+		disabled: false,
+		errorMessage: '',
+		sucessMessage: ''
 	};
 
 	onSubmit = async event => {
 		event.preventDefault();
 		this.setState( { loading: true, errorMessage: '', disabled: true, createCandidateMessageOpen: false } );
-		console.log(this.state);
 
 		try {
 			if ( !this.state.termos ) {
@@ -48,23 +49,35 @@ class OpenElectionCreateCandidate extends Component {
 				 from: accounts[0]
 			 });
 
-			Router.pushRoute(`/openElections/${this.props.address}`);
+			 this.setState( { sucessMessage: 'Candidato Criado!' } );
+
+			 setTimeout(() => {
+				 Router.pushRoute(`/openElections/${this.props.address}/admin`);
+       }, 3000);
+
 		} catch ( e ) {
 			this.setState( { errorMessage: e.message } )
-			}
+		}
 
-			this.setState( { loading: false, disabled: false } );
+		this.setState( { loading: false, disabled: false } );
 		};
 
 		render() {
 			return (
 				<Layout>
 
-				<Link route={`/openElections/${this.props.address}`}>
+				<Link route={`/openElections/${this.props.address}/admin`}>
 	        <Button primary circular content='Voltar' icon='arrow left' labelPosition='left' />
 	      </Link>
 
 				<h3>Criar novo candidato</h3>
+
+				{
+	      !this.state.sucessMessage ? null :
+	      (
+	      <Message success header='Sucesso!' content={this.state.sucessMessage} />
+	      )
+	      }
 
 				<Form error={!!this.state.errorMessage}>
 
@@ -102,7 +115,13 @@ class OpenElectionCreateCandidate extends Component {
 
 					<Message error header="Oops!" content={this.state.errorMessage}/>
 
-					<Button onClick={event => this.setState( { createCandidateMessageOpen: true } )} loading={this.state.loading} disabled={this.state.disabled} animated="animated" primary="primary">
+					<Button
+							onClick={event => this.setState( { createCandidateMessageOpen: true } )}
+							loading={this.state.loading}
+							disabled={this.state.disabled}
+							animated
+							primary
+					>
 						<Button.Content visible>Vamos lá!!</Button.Content>
 						<Button.Content hidden>
 							<Icon name='plus'/>

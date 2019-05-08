@@ -17,7 +17,9 @@ class OpenElectionBeAnVoter extends Component {
     completeName: '',
     termos: false,
     loading: false,
-    disabled: false
+    disabled: false,
+    errorMessage: '',
+    sucessMessage: ''
   };
 
   onSubmit = async event => {
@@ -43,7 +45,12 @@ class OpenElectionBeAnVoter extends Component {
         from: accounts[0]
       });
 
-      Router.pushRoute(`/openElections/${this.props.address}`);
+      this.setState( { sucessMessage: 'Agora você é um eleitor!' } );
+
+      setTimeout(() => {
+        Router.pushRoute(`/openElections/${this.props.address}`);
+      }, 3000);
+
     } catch (e) {
       this.setState({ errorMessage: e.message })
     }
@@ -60,15 +67,16 @@ class OpenElectionBeAnVoter extends Component {
       </Link>
 
       <h3>Se tornando um eleitor</h3>
+
+      {
+      !this.state.sucessMessage ? null :
+      (
+      <Message success header='Sucesso!' content={this.state.sucessMessage} />
+      )
+      }
+
       <Form error={!!this.state.errorMessage}>
-        <Form.Field required>
-          <label>Nome Completo</label>
-          <Input
-           placeholder='Nome Completo'
-           value={this.state.completeName}
-           onChange={event =>
-            this.setState({ completeName: event.target.value }) } />
-        </Form.Field>
+
         <Form.Field required>
           <label>CPF</label>
           <Input
@@ -78,6 +86,15 @@ class OpenElectionBeAnVoter extends Component {
            type='text'
            onChange={event =>
              this.setState({ cpf: event.target.value }) } />
+        </Form.Field>
+
+        <Form.Field required>
+          <label>Nome Completo</label>
+          <Input
+           placeholder='Nome Completo'
+           value={this.state.completeName}
+           onChange={event =>
+            this.setState({ completeName: event.target.value }) } />
         </Form.Field>
 
         <Form.Checkbox
