@@ -14,9 +14,9 @@ class OpenElectionShow extends Component {
       const [account] = await web3.eth.getAccounts();
       //const isCandidate = openElection.methods.isCandidateBool(account).call();
       //const isVoter = openElection.methods.isVoterBool(account).call();
-      const isManager =  account == summary[0] ? true : false;
 
       return {
+        account: account,
         address: props.query.address,
         isManager: isManager,
         isCandidate: false,
@@ -117,7 +117,7 @@ class OpenElectionShow extends Component {
               <Menu.Item className='header'>Opções</Menu.Item>
 
               {
-              this.props.isManager &&
+              this.props.isManager === this.props.account &&
               (
               <Menu.Item>
                 <Grid.Column width={3}>
@@ -131,7 +131,7 @@ class OpenElectionShow extends Component {
 
 
               {
-              !this.props.isManager && !this.props.isEnded && this.props.isStarted &&
+              this.props.isManager !== this.props.account && !this.props.isEnded && this.props.isStarted &&
               (
               <Menu.Item>
                 <Link route={`/openElections/${this.props.address}/voting`}>
@@ -143,7 +143,7 @@ class OpenElectionShow extends Component {
               }
 
               {
-              !this.props.isManager && !this.props.isEnded && !this.props.isStarted &&
+              this.props.isManager !== this.props.account && !this.props.isEnded && !this.props.isStarted &&
               (
               <Menu.Item>
                 <Link route={`/openElections/${this.props.address}/beAnVoter`}>
