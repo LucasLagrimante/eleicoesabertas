@@ -131,7 +131,7 @@ class OpenElectionShow extends Component {
 
 
               {
-              !this.props.isEnded && this.props.isStarted &&
+              !this.props.isManager && !this.props.isEnded && this.props.isStarted &&
               (
               <Menu.Item>
                 <Link route={`/openElections/${this.props.address}/voting`}>
@@ -143,7 +143,7 @@ class OpenElectionShow extends Component {
               }
 
               {
-              !this.props.isEnded && !this.props.isStarted &&
+              !this.props.isManager && !this.props.isEnded && !this.props.isStarted &&
               (
               <Menu.Item>
                 <Link route={`/openElections/${this.props.address}/beAnVoter`}>
