@@ -111,6 +111,10 @@ class OpenElectionAdmin extends Component {
           from: account
         });
 
+        setTimeout(() => {
+          Router.pushRoute(`/openElections/${this.props.address}`);
+        }, 3000);
+
       } catch (e) {
         this.setState({ errorMessage: e.message })
       }
@@ -131,6 +135,9 @@ class OpenElectionAdmin extends Component {
           from: account
         });
 
+        setTimeout(() => {
+          Router.pushRoute(`/openElections/${this.props.address}`);
+        }, 3000);
       } catch (e) {
         this.setState({ errorMessage: e.message })
       }
@@ -152,7 +159,7 @@ class OpenElectionAdmin extends Component {
       </Header>
 
         {
-        !this.state.errorMessage ? null :
+        this.state.errorMessage &&
         (
         <Message error header="Oops!" content={this.state.errorMessage} />
         )
@@ -173,7 +180,7 @@ class OpenElectionAdmin extends Component {
 
             <Menu.Item>
               <Link route={`/openElections/${this.props.address}/admin/createCandidate`}>
-                <Button primary>Criar novo candidato</Button>
+                <Button primary>Cadastrar novo candidato</Button>
               </Link>
             </Menu.Item>
 

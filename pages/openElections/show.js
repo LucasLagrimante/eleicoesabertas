@@ -26,9 +26,9 @@ class OpenElectionShow extends Component {
         maxVoters: summary[2],
         maxCandidates: summary[3],
         totalVotes: summary[4],
-        onlyAuthenticated: summary[5].toString(),
-        isEnded: summary[6].toString(),
-        isStarted: summary[7].toString(),
+        onlyAuthenticated: summary[5],
+        isEnded: summary[6],
+        isStarted: summary[7],
         openElectionName: summary[8].toString(),
         beAnVoterMessageOpen: false
       };
@@ -75,17 +75,17 @@ class OpenElectionShow extends Component {
             description: 'Número de votos válidos.'
           },
           {
-            header: onlyAuthenticated,
+            header: onlyAuthenticated.toString(),
             meta: 'Apenas usuários Autenticados',
             description: 'Essa flag garante que apenas usuários autenticados poderão votar.'
           },
           {
-            header: isEnded,
+            header: isEnded.toString(),
             meta: 'Terminou?',
             description: 'Essa flag nos diz se a votação está terminada.'
           },
           {
-            header: isStarted,
+            header: isStarted.toString(),
             meta: 'Começou?',
             description: 'Essa flag nos diz se já podemos votar nessa eleição.'
           }
@@ -117,7 +117,7 @@ class OpenElectionShow extends Component {
               <Menu.Item className='header'>Opções</Menu.Item>
 
               {
-              !this.props.isManager ? null :
+              this.props.isManager &&
               (
               <Menu.Item>
                 <Grid.Column width={3}>
@@ -129,24 +129,25 @@ class OpenElectionShow extends Component {
               )
               }
 
+
               {
-              this.props.isManager ? null :
+              !this.props.isEnded && this.props.isStarted &&
               (
               <Menu.Item>
                 <Link route={`/openElections/${this.props.address}/voting`}>
-                  <Button inverted color='teal'> Votar!! </Button>
+                  <Button
+                   inverted color='blue'> Votar!! </Button>
                 </Link>
               </Menu.Item>
               )
               }
 
               {
-              this.props.isManager ? null :
+              !this.props.isEnded && !this.props.isStarted &&
               (
               <Menu.Item>
                 <Link route={`/openElections/${this.props.address}/beAnVoter`}>
                   <Button
-                  disabled={this.props.isVoter}
                   inverted
                   color='blue'>
                   Se tornar um eleitor

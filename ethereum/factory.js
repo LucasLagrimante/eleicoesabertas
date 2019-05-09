@@ -3,7 +3,7 @@ import OpenElectionFactory from './build/OpenElectionFactory.json';
 
 const instance = new web3.eth.Contract(
   JSON.parse(OpenElectionFactory.interface),
-  '0xE05AEC82BBa738ffFe0Bc610aEc18c886554f319'
+  '0xd2cbDDbF971714Aa84D9F4cC21e5A9Eb5E1C0CAd'
 );
 
 export default instance;

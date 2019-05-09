@@ -66,7 +66,7 @@ class OpenElectionNew extends Component {
       <h3>Criando uma eleição</h3>
 
       {
-      !this.state.sucessMessage ? null :
+      this.state.sucessMessage &&
       (
       <Message success header='Sucesso!' content={this.state.sucessMessage} />
       )

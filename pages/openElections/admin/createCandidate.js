@@ -45,7 +45,7 @@ class OpenElectionCreateCandidate extends Component {
 			const accounts = await web3.eth.getAccounts();
 			const openElection = OpenElection( this.props.address );
 			await openElection.methods.createCandidate( this.state.completeName, this.state.cpf, this.state.candidateAddress )
-			.send( {
+			.send({
 				 from: accounts[0]
 			 });
 
@@ -70,10 +70,10 @@ class OpenElectionCreateCandidate extends Component {
 	        <Button primary circular content='Voltar' icon='arrow left' labelPosition='left' />
 	      </Link>
 
-				<h3>Criar novo candidato</h3>
+				<h3>Cadastrar novo candidato</h3>
 
 				{
-	      !this.state.sucessMessage ? null :
+	      this.state.sucessMessage &&
 	      (
 	      <Message success header='Sucesso!' content={this.state.sucessMessage} />
 	      )

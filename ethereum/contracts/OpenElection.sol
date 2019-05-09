@@ -51,10 +51,10 @@ contract OpenElection {
 
     address public manager;
     string public electionName;
-    mapping(address => uint) internal candidates;
-    Candidate[] internal candidatesArray;
-    mapping(address => uint) internal voters;
-    Voter[] internal votersArray;
+    mapping(address => uint) public candidates;
+    Candidate[] public candidatesArray;
+    mapping(address => uint) public voters;
+    Voter[] public votersArray;
     uint public maxCandidates;
     uint public maxVoters;
     uint public totalVotes;
@@ -155,8 +155,8 @@ contract OpenElection {
             require(voter.authenticated, "Apenas usuários autenticados.");
         }
 
-        require(candidatesArray[candidates[_addressOfCandidate]].exists, "Candidato não existe.");
-        Candidate storage candidate = candidatesArray[candidates[_addressOfCandidate]];
+        require(candidatesArray[candidates[_addressOfCandidate] - 1].exists, "Candidato não existe.");
+        Candidate storage candidate = candidatesArray[candidates[_addressOfCandidate] - 1];
         if (onlyAuthenticated) {
             require(candidate.authenticated, "Apenas candidatos autenticados podem ser votados autenticados.");
         }
@@ -172,26 +172,29 @@ contract OpenElection {
     function startOpenElection()
     public restricted ended started
     {
+        require(votersArray.length > 0, "Ao menos um eleitor cadastrado.");
+        require(candidatesArray.length > 0, "Ao menos um candidado cadastrado.");
+
         isStarted = true;
     }
 
-    function setVoterAuthenticatedById(uint _indexOfVoter)
+    function setVoterAuthenticated(address _addressOfVoter)
     public restricted started
     {
-        require(votersArray[_indexOfVoter].exists, "Eleitor não existe.");
+        require(votersArray[voters[_addressOfVoter] - 1].exists, "Eleitor não existe.");
 
-        Voter storage voter = votersArray[_indexOfVoter];
+        Voter storage voter = votersArray[voters[_addressOfVoter] - 1];
         require(voter.authenticated != true, "Eleitor já autenticado.");
 
         voter.authenticated = true;
     }
 
-    function setCandidateAuthenticatedById(uint _indexOfCandidate)
+    function setCandidateAuthenticated(address _addressOfCandidate)
     public restricted started
     {
-        require(candidatesArray[_indexOfCandidate].exists, "Candidato não existe.");
+        require(candidatesArray[candidates[_addressOfCandidate] - 1].exists, "Candidato não existe.");
 
-        Candidate storage candidate = candidatesArray[_indexOfCandidate];
+        Candidate storage candidate = candidatesArray[candidates[_addressOfCandidate] - 1];
         require(candidate.authenticated != true, "Candidato já autenticado.");
 
         candidate.authenticated = true;
@@ -225,13 +228,13 @@ contract OpenElection {
     function isCandidateBool(address _addressOfCandidate)
     public view returns (bool)
     {
-        return candidatesArray[candidates[_addressOfCandidate]].exists;
+        return candidatesArray[candidates[_addressOfCandidate] - 1].exists;
     }
 
     function isVoterBool(address _addressOfVoter)
     public view returns (bool)
     {
-        return votersArray[voters[_addressOfVoter]].exists;
+        return votersArray[voters[_addressOfVoter] - 1].exists;
     }
 
     function getSummary() public view returns (
@@ -250,6 +253,17 @@ contract OpenElection {
         );
     }
 
+    function getCandidateInfo(uint _indexOfCandidate) public view returns (
+        string memory, address
+        ) {
+
+        Candidate storage candidate = candidatesArray[_indexOfCandidate];
+        return (
+            candidate.completeName,
+            candidate.where
+        );
+    }
+
     function forceEndOpenElection()
     public restricted ended
     {
@@ -263,7 +277,6 @@ contract OpenElection {
     internal ended
     {
         require(isStarted, "Essa eleição ainda não começou.");
-        require(totalVotes > (maxVoters / 2), "Número mínimo de votos ainda não atingido para finalizar eleição.");
         isEnded = true;
         setWinner();
     }
