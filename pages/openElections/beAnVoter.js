@@ -52,7 +52,11 @@ class OpenElectionBeAnVoter extends Component {
       }, 3000);
 
     } catch (e) {
-      this.setState({ errorMessage: e.message })
+      if (e.message == 'No "from" address specified in neither the given options, nor the default options.') {
+        this.setState({ errorMessage: "Há algum problema com nossa conexão com o MetaMask, verifique se o modo privado está ativo!" })
+      } else {
+        this.setState({ errorMessage: e.message })
+      }
     }
 
     this.setState({ loading: false, disabled: false });
@@ -81,7 +85,7 @@ class OpenElectionBeAnVoter extends Component {
           <label>CPF</label>
           <Input
            placeholder='CPF'
-           maxLength="11"
+           maxLength="14"
            value={this.state.cpf}
            type='text'
            onChange={event =>
