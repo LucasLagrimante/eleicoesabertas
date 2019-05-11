@@ -94,7 +94,7 @@ contract OpenElection {
     }
 
     constructor
-    (address creator, uint _maxCandidates, uint _maxVoters, bool _onlyAuthenticated, string memory _electionName)
+    ( address creator, uint _maxCandidates, uint _maxVoters, bool _onlyAuthenticated, string memory _electionName)
     public {
         manager = creator;
         maxCandidates = _maxCandidates;
@@ -292,8 +292,10 @@ contract OpenElection {
 
             if (i > 0) {
                 Candidate storage previousCandidate = candidatesArray[i-1];
-                if (candidate.numVotes > previousCandidate.numVotes) {
-                    winner = previousCandidate.where;
+                if (candidate.numVotes >= previousCandidate.numVotes) {
+                    if (candidate.numVotes != previousCandidate.numVotes){
+                      winner = candidate.where;
+                    }
                 }
             }
         }
