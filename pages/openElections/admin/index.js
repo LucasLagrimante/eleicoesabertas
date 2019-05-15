@@ -199,7 +199,7 @@ class OpenElectionAdmin extends Component {
                 <Menu.Item className='header'>Opções</Menu.Item>
 
                 {
-                  !this.props.isStarted &&
+                  !this.props.isStarted && this.props.maxCandidates != this.props.numCandidates &&
                   (
                     <Menu.Item>
                       <Link route={`/openElections/${this.props.address}/admin/createCandidate`}>
