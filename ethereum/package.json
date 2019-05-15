@@ -28,7 +28,6 @@
   "license": "ISC",
   "homepage": "https://eleicoes-abertas.herokuapp.com/",
   "dependencies": {
-    "express": "^4.16.4",
     "fs-extra": "^7.0.1",
     "ganache-cli": "^6.4.1",
     "mocha": "^6.0.2",

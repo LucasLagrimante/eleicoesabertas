@@ -1,4 +1,4 @@
-pragma solidity ^0.4.25;
+pragma solidity >=0.4.25;
 
 /// @author Lucas Lagrimante Martinho
 // Votos terão peso?
@@ -201,19 +201,19 @@ contract OpenElection {
     }
 
     function getNumOfVoters()
-    public view returns (uint)
+    public view returns (uint256)
     {
         return votersArray.length;
     }
 
     function getNumOfCandidates()
-    public view returns (uint)
+    public view returns (uint256)
     {
         return candidatesArray.length;
     }
 
     function getIndexCandidateByAddress(address _addressOfCandidate)
-    public view returns (uint)
+    public view returns (uint256)
     {
         return candidates[_addressOfCandidate];
     }
@@ -238,7 +238,7 @@ contract OpenElection {
     }
 
     function getSummary() public view returns (
-        address, address, uint, uint, uint, bool, bool, bool, string memory
+        address, address, uint256, uint256, uint256, bool, bool, bool, string memory
         ) {
         return (
             manager,

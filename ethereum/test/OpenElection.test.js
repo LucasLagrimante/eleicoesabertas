@@ -20,7 +20,7 @@ beforeEach(async () => {
 
   // aqui estamos gerando um novo contrato fábrica
   factory = await new web3.eth.Contract(JSON.parse(compiledFactory.interface)).
-    deploy({
+  deploy({
       data: compiledFactory.bytecode
     })
     .send({
@@ -61,20 +61,13 @@ describe('OpenElections', () => {
       gas: '3000000'
     });
 
-    let isVoter = await openElection.methods.isVoterBool(accounts[1]).call();
-    assert(isVoter);
-
     let numOfVoters = await openElection.methods.getNumOfVoters().call();
     assert(numOfVoters == 1);
-
 
     await openElection.methods.beAnVoter('Felippe Jabour', '12345678910').send({
       from: accounts[2],
       gas: '3000000'
     });
-
-    isVoter = await openElection.methods.isVoterBool(accounts[2]).call();
-    assert(isVoter);
 
     numOfVoters = await openElection.methods.getNumOfVoters().call();
     assert(numOfVoters == 2);
@@ -86,9 +79,6 @@ describe('OpenElections', () => {
       gas: '3000000'
     });
 
-    let isCandidate = await openElection.methods.isCandidateBool(accounts[1]).call();
-    assert(isCandidate);
-
     let numOfCandidates = await openElection.methods.getNumOfCandidates().call();
     assert(numOfCandidates == 1);
 
@@ -96,9 +86,6 @@ describe('OpenElections', () => {
       from: accounts[0], //manager
       gas: '3000000'
     });
-
-    isCandidate = await openElection.methods.isCandidateBool(accounts[2]).call();
-    assert(isCandidate);
 
     numOfCandidates = await openElection.methods.getNumOfCandidates().call();
     assert(numOfCandidates == 2);

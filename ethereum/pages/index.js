@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import factory from '../ethereum/factory';
 import { Card, Button } from 'semantic-ui-react';
 import Layout from '../components/Layout';
-import { Link, Router } from '../routes';
-import OpenElection from "../ethereum/openelection";
+import web3 from '../ethereum/web3';
+import { Link } from '../routes';
+import OpenElection from '../ethereum/openelection';
+
 class OpenElectionIndex extends Component {
 
   static async getInitialProps() {
@@ -13,10 +15,10 @@ class OpenElectionIndex extends Component {
     const openElections = await Promise.all(
       Array(parseInt(openElectionsCount)).fill().map((element, index) => {
         return {
-          openElectionNames: OpenElection(openElectionsAddressArray[index]).methods.electionName().call(function (err, result) {
-            return result;
-          }),
-          openElectionName: 'Eleição ' + index,
+        //  openElectionName: OpenElection(openElectionsAddressArray[index]).methods.electionName().call().then(v => {
+        //    console.log(v);
+        //  }),
+        openElectionName: 'Eleição ' + index,
           address: openElectionsAddressArray[index]
         }
       })
@@ -29,13 +31,12 @@ class OpenElectionIndex extends Component {
 
   renderOpenElections() {
     const items = this.props.openElections.map((element, index) => {
-
       return {
         header: element.openElectionName.toString(),
         meta: element.address,
         description: (
           <Link route={`/openElections/${element.address}`}>
-            <a>Ver Eleição Aberta</a>
+            Ver Eleição Aberta
           </Link>
         ),
         fluid: true
@@ -50,23 +51,18 @@ class OpenElectionIndex extends Component {
     return (
       <Layout>
         <div>
-
-          <h3> Eleições Criadas </h3>
-
-          <Link route='/openElections/new'>
-            <a>
-              <Button primary animated='fade' floated="right">
-                <Button.Content visible>Criar Eleição Aberta</Button.Content>
-                <Button.Content hidden>Agora mesmo!!</Button.Content>
-              </Button>
-            </a>
-          </Link>
-
-          {this.renderOpenElections()}
-
-          <br />
-          <div>Foram encontradas {this.props.openElections.length} eleições.</div>
-
+        <h3> Eleições Criadas </h3>
+        <Link route='/openElections/new'>
+            <Button
+              floated="right"
+              content="Criar Eleição Aberta"
+              icon="add circle"
+              primary
+            />
+        </Link>
+        {this.renderOpenElections()}
+        <br/><br/>
+        <div>Foram encontradas {this.props.openElections.length} eleições.</div>
         </div>
       </Layout>
     )
