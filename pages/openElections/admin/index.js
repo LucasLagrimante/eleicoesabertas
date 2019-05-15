@@ -22,9 +22,9 @@ class OpenElectionAdmin extends Component {
       maxVoters: summary[2],
       maxCandidates: summary[3],
       totalVotes: summary[4],
-      onlyAuthenticated: summary[5].toString(),
-      isEnded: summary[6].toString(),
-      isStarted: summary[7].toString(),
+      onlyAuthenticated: summary[5],
+      isEnded: summary[6],
+      isStarted: summary[7],
       openElectionName: summary[8].toString()
     };
   }
@@ -49,8 +49,7 @@ class OpenElectionAdmin extends Component {
       totalVotes,
       onlyAuthenticated,
       isEnded,
-      isStarted,
-      openElectionName
+      isStarted
     } = this.props;
 
     const items = [
@@ -80,17 +79,17 @@ class OpenElectionAdmin extends Component {
         description: 'Número de votos válidos.'
       },
       {
-        header: onlyAuthenticated,
+        header: onlyAuthenticated.toString(),
         meta: 'Apenas usuários Autenticados',
         description: 'Essa flag garante que apenas usuários autenticados poderão votar.'
       },
       {
-        header: isEnded,
+        header: isEnded.toString(),
         meta: 'Terminou?',
         description: 'Essa flag nos diz se a votação está terminada.'
       },
       {
-        header: isStarted,
+        header: isStarted.toString(),
         meta: 'Começou?',
         description: 'Essa flag nos diz se já podemos votar nessa eleição.'
       }
