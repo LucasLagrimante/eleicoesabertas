@@ -33,7 +33,11 @@ class OpenElectionIndex extends Component {
     super(props);
 
     this.state = {
-      isVoter: false
+      isVoter: false,
+      requesAuthenticationMessageOpen: false,
+      loadingRequesAuthentication: false,
+      disabledRequesAuthentication: false,
+      errorMessage: ''
     }
 
     this.isVoter();
@@ -122,6 +126,33 @@ class OpenElectionIndex extends Component {
     }
   };
 
+  requestAuthetication = async event => {
+    event.preventDefault();
+    this.setState({ loadingRequestAuthetication: true, disabledRequestAuthetication: true, requestAutheticationMessageOpen: false });
+
+    try {
+      const [account] = await web3.eth.getAccounts();
+      const openElection = OpenElection(this.props.address);
+      await openElection.methods.beAuthenticated()
+        .send({
+          from: account
+        });
+
+      setTimeout(() => {
+        Router.pushRoute(`/openElections/${this.props.address}`);
+      }, 3000);
+
+    } catch (e) {
+      if (e.message == 'No "from" address specified in neither the given options, nor the default options.') {
+        this.setState({ errorMessage: "Há algum problema com nossa conexão com o MetaMask, verifique se o modo privado está ativo!" })
+      } else {
+        this.setState({ errorMessage: e.message })
+      }
+    }
+
+    this.setState({ loadingRequestAuthetication: false, disabledRequestAuthetication: false });
+  };
+
   render() {
     return (
       <Layout>
@@ -200,6 +231,29 @@ class OpenElectionIndex extends Component {
                     </Menu.Item>
                   )
                 }
+
+                {
+                  this.props.manager !== this.props.account && !this.props.isEnded &&
+                  !this.props.isStarted &&
+                  (
+                    <Menu.Item>
+                      <a>
+                        <Button
+                          onClick={event => this.setState({ requestAutheticationMessageOpen: true })}
+                          inverted content='Solicitar Autenticação' color="blue" />
+                      </a>
+                    </Menu.Item>
+                  )
+                }
+
+                <Confirm
+                  open={this.state.requestAutheticationMessageOpen}
+                  header='Está prestes a requisitar uma autenticação!!!'
+                  content='Lembre-se que essa ação não poderá ser desfeita.'
+                  onConfirm={this.requestAuthetication}
+                  onCancel={event =>
+                    this.setState({ requestAutheticationMessageOpen: false })}
+                />
               </Menu>
             </Grid.Column>
           </Grid.Row>

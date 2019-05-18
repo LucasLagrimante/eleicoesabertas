@@ -1,4 +1,0 @@
-Autores
--------
-
-* Lucas Lagrimante
