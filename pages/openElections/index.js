@@ -271,7 +271,8 @@ class OpenElectionIndex extends Component {
 
                 <Confirm
                   open={this.state.requestAuthenticationMessageOpen}
-                  header='Está prestes a requisitar uma autenticação!!!'
+                  header='Não estamos disponibilizando uma plataforma de autenticação, 
+                  entre em contato com o administrador do sistema para que ele valide seu cadastro!!!'
                   content='Lembre-se que essa ação não poderá ser desfeita.'
                   onConfirm={this.requestAuthentication}
                   onCancel={event =>
