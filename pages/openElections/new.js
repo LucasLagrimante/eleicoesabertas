@@ -39,7 +39,7 @@ class OpenElectionNew extends Component {
 
       setTimeout(() => {
         Router.pushRoute(`/`);
-      }, 3000);
+      }, 5000);
 
     } catch (e) {
       if (e.message == 'No "from" address specified in neither the given options, nor the default options.') {

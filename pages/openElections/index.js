@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Layout from "../../components/Layout";
 import OpenElection from "../../ethereum/openelection";
-import { Card, Grid, Button, Menu } from "semantic-ui-react";
+import { Card, Grid, Button, Menu, Confirm } from "semantic-ui-react";
 import web3 from "../../ethereum/web3";
 import { Link, Router } from "../../routes";
 
@@ -34,13 +34,15 @@ class OpenElectionIndex extends Component {
 
     this.state = {
       isVoter: false,
-      requesAuthenticationMessageOpen: false,
-      loadingRequesAuthentication: false,
-      disabledRequesAuthentication: false,
+      isCandidate: false,
+      requestAuthenticationMessageOpen: false,
+      loadingRequestAuthentication: false,
+      disabledRequestAuthentication: false,
       errorMessage: ''
     }
 
     this.isVoter();
+    this.isCandidate();
   }
 
   renderCards() {
@@ -126,17 +128,26 @@ class OpenElectionIndex extends Component {
     }
   };
 
-  requestAuthetication = async event => {
+  isCandidate = async event => {
+    try {
+      let result = await OpenElection(this.props.address).methods.isCandidateBool(web3.currentProvider.selectedAddress).call();
+      this.setState({ isCandidate: result });
+    } catch (e) {
+      this.setState({ isCandidate: false });
+    }
+  };
+
+  requestAuthentication = async event => {
     event.preventDefault();
-    this.setState({ loadingRequestAuthetication: true, disabledRequestAuthetication: true, requestAutheticationMessageOpen: false });
+    this.setState({ loadingRequestAuthentication: true, disabledRequestAuthentication: true, requestAuthenticationMessageOpen: false });
 
     try {
       const [account] = await web3.eth.getAccounts();
       const openElection = OpenElection(this.props.address);
-      await openElection.methods.beAuthenticated()
-        .send({
-          from: account
-        });
+      
+      await openElection.methods.createRequest().send({
+        from: account
+      });
 
       setTimeout(() => {
         Router.pushRoute(`/openElections/${this.props.address}`);
@@ -150,7 +161,7 @@ class OpenElectionIndex extends Component {
       }
     }
 
-    this.setState({ loadingRequestAuthetication: false, disabledRequestAuthetication: false });
+    this.setState({ loadingRequestAuthentication: false, disabledRequestAuthentication: false });
   };
 
   render() {
@@ -220,7 +231,7 @@ class OpenElectionIndex extends Component {
 
                 {
                   this.props.manager !== this.props.account && !this.props.isEnded &&
-                  !this.props.isStarted && !this.state.isVoter &&
+                  !this.props.isStarted && !this.state.isVoter && !this.state.isCandidate &&
                   (
                     <Menu.Item>
                       <Link route={`/openElections/${this.props.address}/beAnVoter`} >
@@ -234,25 +245,29 @@ class OpenElectionIndex extends Component {
 
                 {
                   this.props.manager !== this.props.account && !this.props.isEnded &&
-                  !this.props.isStarted &&
+                  !this.props.isStarted && (this.state.isVoter || this.state.isCandidate) &&
                   (
                     <Menu.Item>
                       <a>
                         <Button
-                          onClick={event => this.setState({ requestAutheticationMessageOpen: true })}
-                          inverted content='Solicitar Autenticação' color="blue" />
+                          onClick={event => this.setState({ requestAuthenticationMessageOpen: true })}
+                          inverted content='Solicitar Autenticação'
+                          color="blue"
+                          loading={this.state.loadingRequestAuthentication}
+                          disabled={this.state.disabledRequestAuthentication}
+                        />
                       </a>
                     </Menu.Item>
                   )
                 }
 
                 <Confirm
-                  open={this.state.requestAutheticationMessageOpen}
+                  open={this.state.requestAuthenticationMessageOpen}
                   header='Está prestes a requisitar uma autenticação!!!'
                   content='Lembre-se que essa ação não poderá ser desfeita.'
-                  onConfirm={this.requestAuthetication}
+                  onConfirm={this.requestAuthentication}
                   onCancel={event =>
-                    this.setState({ requestAutheticationMessageOpen: false })}
+                    this.setState({ requestAuthenticationMessageOpen: false })}
                 />
               </Menu>
             </Grid.Column>
