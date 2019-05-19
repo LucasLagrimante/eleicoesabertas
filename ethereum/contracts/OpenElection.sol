@@ -63,6 +63,7 @@ contract OpenElection {
     uint public totalVotes;
     bool public onlyAuthenticated;
     mapping(address => bool) public authenticated;
+    mapping(address => bool) public requestIsOpen;
     Request[] public requests;
     bool public isEnded;
     bool public isStarted;
@@ -120,6 +121,10 @@ contract OpenElection {
 
         votersArray.push(newVoter);
         voters[msg.sender] = votersArray.length;
+
+        if (votersArray.length == maxVoters && candidatesArray.length == maxCandidates) {
+            startOpenElectionInternal();
+        }
     }
 
     function createCandidate(string memory _completeName, string memory _cpf, address _candidateAddress)
@@ -140,6 +145,10 @@ contract OpenElection {
 
         candidatesArray.push(newCandidate);
         candidates[_candidateAddress] = candidatesArray.length;
+
+        if (votersArray.length == maxVoters && candidatesArray.length == maxCandidates) {
+            startOpenElectionInternal();
+        }
     }
 
     function vote(address _addressOfCandidate)
@@ -162,6 +171,7 @@ contract OpenElection {
         candidate.numVotes++;
         totalVotes++;
         voter.voted = true;
+        
         if (totalVotes == votersArray.length) {
             endOpenElection();
         }
@@ -176,11 +186,23 @@ contract OpenElection {
         isStarted = true;
     }
 
+    function startOpenElectionInternal()
+    internal ended started
+    {
+        require(votersArray.length > 0, "Ao menos um eleitor cadastrado.");
+        require(candidatesArray.length > 0, "Ao menos um candidado cadastrado.");
+
+        isStarted = true;
+    }
+
     function createRequest()
-    public started ended
+    public ended
     {
 
-        require(candidates[msg.sender] == 0 || voters[msg.sender] == 0, "Eleitor ou Candidato não existe.");
+        require(candidates[msg.sender] > 0 || voters[msg.sender] > 0, "Eleitor ou Candidato não existe.");
+        require(!authenticated[msg.sender], "Já autenticado.");
+        require(!requestIsOpen[msg.sender], "Solicitação em andamento.");
+        require(msg.sender != manager, "Esse Candidato é o administrador.");
 
         Request memory newRequest = Request({
             where: msg.sender,
@@ -188,16 +210,19 @@ contract OpenElection {
         });
 
         requests.push(newRequest);
+        requestIsOpen[msg.sender] = true;
     }
 
-    function setAuthenticated(uint _id, address _address, bool _ok)
-    public restricted started ended
+    function finalizeRequest(uint _id, address _address, bool _ok)
+    public restricted ended
     {
-        require(voters[_address] == 0 || voters[_address] == 0, "Eleitor ou Candidato não existe.");
-        require(!authenticated[_address] || !authenticated[_address], "Já autenticado.");
+        require(candidates[_address] > 0 || voters[_address] > 0, "Eleitor ou Candidato não existe.");
+        require(!authenticated[_address], "Já autenticado.");
+        require(_address != manager, "Esse Candidato é o administrador.");
 
         requests[_id].complete = true;
         authenticated[_address] = _ok;
+        requestIsOpen[_address] = false;
     }
 
     function getNumOfVoters()
@@ -210,19 +235,6 @@ contract OpenElection {
     public view returns (uint256)
     {
         return candidatesArray.length;
-    }
-
-    function getIndexCandidateByAddress(address _addressOfCandidate)
-    public view returns (uint256)
-    {
-        return candidates[_addressOfCandidate];
-    }
-
-    function getAddressCandidateByIndex(uint _indexOfCandidate)
-    public view returns (address)
-    {
-        require(candidatesArray[_indexOfCandidate].exists, "Candidato não existe.");
-        return candidatesArray[_indexOfCandidate].where;
     }
 
     function getRequestsCount()

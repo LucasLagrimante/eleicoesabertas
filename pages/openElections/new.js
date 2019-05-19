@@ -23,12 +23,18 @@ class OpenElectionNew extends Component {
 
     this.setState({ loading: true, errorMessage: '', disabled: true });
 
-    try {
+    try {      
       if (!this.state.termos) {
         this.setState({ loading: false, disabled: false, errorMessage: 'Concorde com os termos!' });
         return;
       } else if (!this.state.maxCandidates.length || !this.state.maxVoters.length || !this.state.electionName.length) {
         this.setState({ loading: false, disabled: false, errorMessage: 'Preencha todos os campos!' });
+        return;
+      } else if (this.state.maxCandidates <= 1) {
+        this.setState({ loading: false, disabled: false, errorMessage: 'Mínimo 2 Candidatos!' });
+        return;
+      } else if (this.state.maxVoters <= 1) {
+        this.setState({ loading: false, disabled: false, errorMessage: 'Mínimo 2 Eleitores!' });
         return;
       }
 

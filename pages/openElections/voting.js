@@ -41,7 +41,7 @@ class OpenElectionVoting extends Component {
         <Card key={index} onClick={event => this.setState({ candidateClicked: candidate, messageOpen: true })}>
           <Image src='https://react.semantic-ui.com/images/avatar/large/matthew.png' wrapped ui={false} />
           <Card.Content>
-            <Card.Header>{candidate[0]}</Card.Header>
+            <Card.Header>{candidate[0].substring(1, 25)}</Card.Header>
             <Card.Description>
               {candidate[1].substring(1, 25)}...
               </Card.Description>
@@ -63,17 +63,7 @@ class OpenElectionVoting extends Component {
         .send({
           from: account
         });
-
-      setTimeout(() => {
-        Router.pushRoute(`/openElections/${this.props.address}`);
-      }, 3000);
-
     } catch (e) {
-
-      setTimeout(() => {
-        Router.pushRoute(`/openElections/${this.props.address}`);
-      }, 3000);
-
       if (e.message == 'No "from" address specified in neither the given options, nor the default options.') {
         this.setState({ errorMessage: "Há algum problema com nossa conexão com o MetaMask, verifique se o modo privado está ativo!" })
       } else {
@@ -81,6 +71,9 @@ class OpenElectionVoting extends Component {
       }
     }
 
+    setTimeout(() => {
+      Router.pushRoute(`/openElections/${this.props.address}`);
+    }, 3000);
   };
 
   onWeb3ProviderChange = event => {

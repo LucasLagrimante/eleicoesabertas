@@ -212,7 +212,7 @@ class OpenElectionAdmin extends Component {
                 }
 
                 {
-                  !this.props.isStarted && !this.props.isEnded &&
+                  !this.props.isEnded &&
                   (
                     <Menu.Item>
                     <Link route={`/openElections/${this.props.address}/admin/requests`}>
@@ -240,7 +240,7 @@ class OpenElectionAdmin extends Component {
                 }
 
                 {
-                  this.props.isEnded &&
+                  !this.props.isEnded &&
                   (
                     <Menu.Item>
                       <Button

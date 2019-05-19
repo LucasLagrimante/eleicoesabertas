@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Layout from "../../components/Layout";
 import OpenElection from "../../ethereum/openelection";
-import { Card, Grid, Button, Menu, Confirm } from "semantic-ui-react";
+import { Card, Grid, Button, Menu, Confirm, Message } from "semantic-ui-react";
 import web3 from "../../ethereum/web3";
 import { Link, Router } from "../../routes";
 
@@ -38,7 +38,8 @@ class OpenElectionIndex extends Component {
       requestAuthenticationMessageOpen: false,
       loadingRequestAuthentication: false,
       disabledRequestAuthentication: false,
-      errorMessage: ''
+      errorMessage: '',
+      sucessMessage: ''
     }
 
     this.isVoter();
@@ -149,10 +150,7 @@ class OpenElectionIndex extends Component {
         from: account
       });
 
-      setTimeout(() => {
-        Router.pushRoute(`/openElections/${this.props.address}`);
-      }, 3000);
-
+      this.setState({ sucessMessage: 'Solicitação criada. Aguarde confirmação do administrador!' });
     } catch (e) {
       if (e.message == 'No "from" address specified in neither the given options, nor the default options.') {
         this.setState({ errorMessage: "Há algum problema com nossa conexão com o MetaMask, verifique se o modo privado está ativo!" })
@@ -162,6 +160,10 @@ class OpenElectionIndex extends Component {
     }
 
     this.setState({ loadingRequestAuthentication: false, disabledRequestAuthentication: false });
+
+    setTimeout(() => {
+      this.setState({ sucessMessage: '' });
+    }, 3000);
   };
 
   render() {
@@ -176,6 +178,14 @@ class OpenElectionIndex extends Component {
         </Link>
 
         <h3>Detalhes da Eleição - {this.props.openElectionName}</h3>
+
+
+				{
+					this.state.sucessMessage &&
+					(
+						<Message success header='Sucesso!' content={this.state.sucessMessage} />
+					)
+				}
 
         <Grid>
           <Grid.Row>
@@ -199,15 +209,13 @@ class OpenElectionIndex extends Component {
                 }
 
                 {
-                  this.props.manager === this.props.account &&
+                  this.props.manager === this.props.account && !this.props.isEnded &&
                   (
                     <Menu.Item>
                       <Grid.Column width={3}>
                         <Link route={`/openElections/${this.props.address}/admin`} >
                           <a>
-                            <Button inverted color="red">
-                              Painel Admin
-                            </Button>
+                            <Button inverted content='Painel Admin!!' color="red" />
                           </a>
                         </Link>
                       </Grid.Column>
@@ -245,7 +253,7 @@ class OpenElectionIndex extends Component {
 
                 {
                   this.props.manager !== this.props.account && !this.props.isEnded &&
-                  !this.props.isStarted && (this.state.isVoter || this.state.isCandidate) &&
+                  (this.state.isVoter || this.state.isCandidate) &&
                   (
                     <Menu.Item>
                       <a>

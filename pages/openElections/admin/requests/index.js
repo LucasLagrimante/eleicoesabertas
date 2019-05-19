@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Layout from '../../../../components/Layout.js';
-import { Button, Table } from 'semantic-ui-react';
+import { Button, Table, Segment, Loader, Image } from 'semantic-ui-react';
 import OpenElection from '../../../../ethereum/openelection';
 import RequestRow from '../../../../components/RequestRow';
 import { Link, Router } from '../../../../routes';
@@ -22,6 +22,13 @@ class RequestIndex extends Component {
     return { address, requests, requestCount };
   }
 
+  state = {
+    messageOpenApprove: false,
+    messageOpenDecline: false,
+    errorMessage: '',
+    loading: false
+  };
+
   renderRows() {
     return this.props.requests.map((request, index) => {
       return (
@@ -35,22 +42,22 @@ class RequestIndex extends Component {
     });
   }
 
-	onWeb3ProviderChange = event => {
-		var account = web3.currentProvider.selectedAddress;
-		setInterval(function () {
-			if (web3.currentProvider.selectedAddress !== account) {
-				account = web3.currentProvider.selectedAddress;
-				Router.pushRoute(`/`);
-			}
-		}, 100);
-	};
+  onWeb3ProviderChange = event => {
+    var account = web3.currentProvider.selectedAddress;
+    setInterval(function () {
+      if (web3.currentProvider.selectedAddress !== account) {
+        account = web3.currentProvider.selectedAddress;
+        Router.pushRoute(`/`);
+      }
+    }, 100);
+  };
 
   render() {
     const { Header, Row, HeaderCell, Body } = Table;
 
     return (
       <Layout>
-				{this.onWeb3ProviderChange()}
+        {this.onWeb3ProviderChange()}
 
         <Link route={`/openElections/${this.props.address}/admin`}>
           <a><Button primary circular content='Voltar' icon='arrow left' labelPosition='left' /></a>
@@ -58,22 +65,37 @@ class RequestIndex extends Component {
 
         <h3>Solicitações</h3>
 
-        <Table>
+        {
+          this.state.loading &&
+          (
+            <Segment>
+              <Loader active size='medium'>Votando...</Loader>
+              <Image src='https://react.semantic-ui.com/images/wireframe/paragraph.png' />
+            </Segment>
+          )
+        }
 
-          <Header>
-            <Row>
-              <HeaderCell>ID</HeaderCell>
-              <HeaderCell>Endereço</HeaderCell>
-              <HeaderCell>Aprovar</HeaderCell>
-              <HeaderCell>Recusar</HeaderCell>
-            </Row>
-          </Header>
+        {
+          !this.state.loading &&
+          (
+            <Table>
 
-          <Body>
-            {this.renderRows()}
-          </Body>
+              <Header>
+                <Row>
+                  <HeaderCell>ID</HeaderCell>
+                  <HeaderCell>Endereço</HeaderCell>
+                  <HeaderCell>Aprovar</HeaderCell>
+                  <HeaderCell>Recusar</HeaderCell>
+                </Row>
+              </Header>
 
-        </Table>
+              <Body>
+                {this.renderRows()}
+              </Body>
+
+            </Table>
+          )
+        }
 
         <div>Foram encontradas {this.props.requestCount} solicitações.</div>
 
