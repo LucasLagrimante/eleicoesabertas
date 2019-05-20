@@ -92,13 +92,13 @@ class OpenElectionIndex extends Component {
               <p>Instituto Federal de Educação Ciência e Tecnologia de Minas Gerais - Campus Juiz de Fora.</p>
               <p>Orientador:  Filippe Coury Jabour Neto.</p>
 
-              <p>Seu uso é livre e o código se encontra público em <a src='https://github.com/LucasLagrimante/eleicoesabertas'>Eleições Abertas.</a>
+              <p>Seu uso é livre e o código se encontra público em <a target="_blank" href='https://github.com/LucasLagrimante/eleicoesabertas'>Eleições Abertas.</a>
               </p>
 
-              <p>Para utilização é necessária a instalação de uma extensão do navegador que permite a integração da Blockchain Ethereum com nossa aplicação chamado <a src='https://metamask.io/'>MetaMask.</a>
+              <p>Para utilização é necessária a instalação de uma extensão do navegador que permite a integração da Blockchain Ethereum com nossa aplicação chamado <a target="_blank" href='https://metamask.io/'>MetaMask.</a>
               </p>
 
-              <p>Para obter ether grátis na subnet Rinkeby, que é onde estamos, acesse: <a src='https://faucet.rinkeby.io/'>Rinkeby Authenticated Faucet.</a>
+              <p>Para obter ether grátis na subnet Rinkeby, que é onde estamos, acesse: <a target="_blank" href='https://faucet.rinkeby.io/'>Rinkeby Authenticated Faucet.</a>
               </p>
 
               <p>Agradecimentos:  Deus, minha Familia e a Thais.</p>
