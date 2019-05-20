@@ -213,7 +213,7 @@ contract OpenElection {
         requestIsOpen[msg.sender] = true;
     }
 
-    function finalizeRequest(uint _id, address _address, bool _ok)
+    function resolveRequest(uint _id, address _address, bool _resolution)
     public restricted ended
     {
         require(candidates[_address] > 0 || voters[_address] > 0, "Eleitor ou Candidato não existe.");
@@ -221,7 +221,7 @@ contract OpenElection {
         require(_address != manager, "Esse Candidato é o administrador.");
 
         requests[_id].complete = true;
-        authenticated[_address] = _ok;
+        authenticated[_address] = _resolution;
         requestIsOpen[_address] = false;
     }
 

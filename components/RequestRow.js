@@ -17,7 +17,7 @@ class RequestRow extends Component {
     try {
       this.setState({ errorMessage: '', messageOpen: false, loading: true });
 
-      await openElection.methods.finalizeRequest(this.props.id, this.props.request.where, true).send({
+      await openElection.methods.resolveRequest(this.props.id, this.props.request.where, true).send({
         from: account
       });
     } catch (e) {
@@ -40,7 +40,7 @@ class RequestRow extends Component {
     try {
       this.setState({ errorMessage: '', messageOpen: false, loading: true });
 
-      await openElection.methods.finalizeRequest(this.props.id, this.props.request.where, false).send({
+      await openElection.methods.resolveRequest(this.props.id, this.props.request.where, false).send({
         from: account
       });
     } catch (e) {
