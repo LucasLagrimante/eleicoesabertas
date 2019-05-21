@@ -101,8 +101,6 @@ class OpenElectionIndex extends Component {
               <p>Para obter ether grátis na subnet Rinkeby, que é onde estamos, acesse: <a src='https://faucet.rinkeby.io/'>Rinkeby Authenticated Faucet.</a>
               </p>
 
-              <p>Agradecimentos:  Deus, minha Familia e a Thais.</p>
-
             </Modal.Description>
           </Modal.Content>
           <Modal.Actions>
