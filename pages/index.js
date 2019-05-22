@@ -51,7 +51,10 @@ class OpenElectionIndex extends Component {
     return <Card.Group items={items} />;
   }
 
-  close = () => this.setState({ open: false })
+  close = () => {
+    ethereum.enable();
+    this.setState({ open: false });
+  }
 
   render() {
 
