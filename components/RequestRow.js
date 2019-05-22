@@ -66,10 +66,20 @@ class RequestRow extends Component {
         <Cell>{id + 1}</Cell>
         <Cell>{request.where}</Cell>
         <Cell>
-          <Button disabled={request.complete || this.state.loading} loading={this.state.loading} color="green" basic onClick={this.onApprove}>Aprovar</Button>
+          <Button
+            color="green"
+            disabled={request.complete || this.state.loading}
+            loading={this.state.loading}
+            basic
+            onClick={this.onApprove}>Aprovar</Button>
         </Cell>
         <Cell>
-          <Button color="red" disabled={request.complete || this.state.loading} loading={this.state.loading} basic onClick={this.onDecline}>Recusar</Button>
+          <Button
+            color="red"
+            disabled={request.complete || this.state.loading}
+            loading={this.state.loading}
+            basic
+            onClick={this.onDecline}>Recusar</Button>
         </Cell>
 
       </Row>
