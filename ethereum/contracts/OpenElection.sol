@@ -306,14 +306,16 @@ contract OpenElection {
 
         for (uint i = 0; i < candidatesArray.length; i++) {
             Candidate storage candidate = candidatesArray[i];
-            winner = candidate.where;
 
             if (i > 0) {
                 Candidate storage previousCandidate = candidatesArray[i-1];
-                if (candidate.numVotes >= previousCandidate.numVotes) {
-                    if (candidate.numVotes != previousCandidate.numVotes){
-                      winner = candidate.where;
-                    }
+                if (candidate.numVotes > previousCandidate.numVotes) {
+                    winner = candidate.where;
+                }
+            } else {
+                Candidate storage nextCandidate = candidatesArray[i+1];
+                if (candidate.numVotes > nextCandidate.numVotes){
+                    winner = candidate.where;
                 }
             }
         }
