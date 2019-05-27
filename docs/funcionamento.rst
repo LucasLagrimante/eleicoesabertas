@@ -1,11 +1,11 @@
 Funcionamento
 ========
 
-Garantias cedidas pelo sistema da blockchain (5 testes passando)
+Garantias cedidas pelo sistema da blockchain
 --------
 
 #. Identidate do eleitor é secreta (porém rastreável)
-#. Andamento da eleição é publico e em tempo real
+#. Andamento da eleição é publico
 
 Garantias testada em código (x testes passando)
 --------

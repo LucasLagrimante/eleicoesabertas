@@ -136,7 +136,7 @@ class OpenElectionBeAnVoter extends Component {
 
           <Confirm
             open={this.state.beAnVoterMessageOpen}
-            header='Está prestes a se tornar um eleitor!!!'
+            header='Está prestes a se tornar um eleitor.'
             content='Lembre-se que: Essa ação não poderá ser desfeita, você não poderá ser um candidato e você poderá votar somente uma vez nessa eleição.'
             onConfirm={this.onSubmit}
             onCancel={event =>

@@ -10,6 +10,11 @@ export default () => {
         <a className='item'> Eleições Abertas </a>
       </Link>
 
+
+      <Link route="/about">
+        <a className='item'> Sobre </a>
+      </Link>
+
       <Menu.Menu position="right">
         <Link route="/">
           <a className='item'> Eleições </a>

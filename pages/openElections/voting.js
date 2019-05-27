@@ -41,9 +41,9 @@ class OpenElectionVoting extends Component {
         <Card key={index} onClick={event => this.setState({ candidateClicked: candidate, messageOpen: true })}>
           <Image src='https://react.semantic-ui.com/images/avatar/large/matthew.png' wrapped ui={false} />
           <Card.Content>
-            <Card.Header>{candidate[0].substring(1, 25)}</Card.Header>
+            <Card.Header>{candidate[0].substring(0, 25)}</Card.Header>
             <Card.Description>
-              {candidate[1].substring(1, 25)}...
+              {candidate[1].substring(0, 25)}...
               </Card.Description>
           </Card.Content>
         </Card>

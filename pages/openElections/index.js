@@ -253,7 +253,7 @@ class OpenElectionIndex extends Component {
 
                 {
                   this.props.manager !== this.props.account && !this.props.isEnded &&
-                  (this.state.isVoter || this.state.isCandidate) &&
+                  (this.state.isVoter || this.state.isCandidate) && this.props.onlyAuthenticated &&
                   (
                     <Menu.Item>
                       <a>
