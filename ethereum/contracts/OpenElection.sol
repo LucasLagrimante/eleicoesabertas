@@ -180,8 +180,8 @@ contract OpenElection {
     function startOpenElection()
     public restricted ended started
     {
-        require(votersArray.length > 0, "Ao menos um eleitor cadastrado.");
-        require(candidatesArray.length > 0, "Ao menos um candidado cadastrado.");
+        require(votersArray.length > (maxVoters / 2), "Mínimo de eleitores não atingido.");
+        require(candidatesArray.length > (maxCandidates / 2), "Mínimo de candidatos não atingido.");
 
         isStarted = true;
     }
@@ -189,8 +189,8 @@ contract OpenElection {
     function startOpenElectionInternal()
     internal ended started
     {
-        require(votersArray.length > 0, "Ao menos um eleitor cadastrado.");
-        require(candidatesArray.length > 0, "Ao menos um candidado cadastrado.");
+        require(votersArray.length > (maxVoters / 2), "Mínimo de eleitores não atingido.");
+        require(candidatesArray.length > (maxCandidates / 2), "Mínimo de candidatos não atingido.");
 
         isStarted = true;
     }
